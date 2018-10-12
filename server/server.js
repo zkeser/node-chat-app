@@ -23,6 +23,23 @@ app.set('view engine', 'hbs');
 //IO connection
 io.on('connection', (socket) => {
     console.log('New user connected');
+
+    // socket.emit('newEmail', {
+    //     from:'keskes882@yahoo.com',
+    //     text:"Hey bro",
+    //     createAt: "123"
+    // })
+
+    socket.emit('newMessage', {
+        from: 'John',
+        text: 'See you then',
+        createdAt: '123123'
+
+    })
+
+    socket.on('createMessage', (message) =>{
+        console.log('createMessage', message)
+    })
   
     socket.on('disconnect', () => {
       console.log('User was disconnected');
