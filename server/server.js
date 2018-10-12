@@ -38,15 +38,33 @@ io.on('connection', (socket) => {
 
     // });
 
+//sends to user when joined
+    socket.emit('newMessage', {
+        from:'Admin',
+        message:"Welcome from the Chat App!",
+        createdAt:new Date().getTime()
+    });
+//sends to all when a user joins
+    socket.broadcast.emit('newMessage', {
+        from:"Admin",
+        text: "New user joined",
+        createdAt:new Date().getTime()
+    })
+//create a message to send to the user
     socket.on('createMessage', (message) =>{
         console.log('createMessage', message)
-        io.emit('newMessage', {
+        io.emit('newMessage', { 
             from:message.from,
             text:message.text,
             createdAt: new Date().getTime()
         });
+        // socket.broadcast.emit('new', {
+        //     from: message.from,
+        //     text: message.text,
+        //     createdAt: new Date().getTime()
+        // })
     });
-  
+ //disconnect 
     socket.on('disconnect', () => {
       console.log('User was disconnected');
     });
