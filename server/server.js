@@ -30,16 +30,22 @@ io.on('connection', (socket) => {
     //     createAt: "123"
     // })
 
-    socket.emit('newMessage', {
-        from: 'John',
-        text: 'See you then',
-        createdAt: '123123'
+    //TEST EMIT TO USER
+    // socket.emit('newMessage', {
+    //     from: 'John',
+    //     text: 'See you then',
+    //     createdAt: '123123'
 
-    })
+    // });
 
     socket.on('createMessage', (message) =>{
         console.log('createMessage', message)
-    })
+        io.emit('newMessage', {
+            from:message.from,
+            text:message.text,
+            createdAt: new Date().getTime()
+        });
+    });
   
     socket.on('disconnect', () => {
       console.log('User was disconnected');
