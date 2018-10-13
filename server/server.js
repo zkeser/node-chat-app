@@ -45,8 +45,9 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user has joined!'))
 
 //create a message to send to the user
-socket.on('createMessage', (message) =>{
+socket.on('createMessage', (message, callBack) =>{
         io.emit('newMessage', generateMessage(message.from, message.text));
+        callBack("This is from the server");
         // socket.broadcast.emit('new', {
         //     from: message.from,
         //     text: message.text,
@@ -58,6 +59,7 @@ socket.on('createMessage', (message) =>{
     //disconnect 
     socket.on('disconnect', () => {
       console.log('User was disconnected');
+      socket.broadcast.emit('newMessage', generateMessage('Admin', 'User has left!'))
     });
   });
 
