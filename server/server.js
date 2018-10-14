@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
 //create a message to send to the user
 socket.on('createMessage', (message, callBack) =>{
         io.emit('newMessage', generateMessage(message.from, message.text));
-        callBack("This is from the server");
+        callBack();
 
         console.log('createMessage', message)
     });
