@@ -52,14 +52,20 @@ callback();
 
 //create a message to send to the user
 socket.to(params.room).on('createMessage', (message, callBack) =>{
-        io.emit('newMessage', generateMessage(message.from, message.text));
-        callBack();
+    var user = users.fetchUser(socket.id)
 
-        console.log('createMessage', message)
+    if(user&& isRealString(message.text)){
+        io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+    }
+        callBack();
     });
- 
+
+    //create location
     socket.to(params.room).on('createLocationMessage', (coords) =>{
-        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude ))
+        var user = users.fetchUser(socket.id)
+        if(user){
+        io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude ))
+        }
     })
 })
     //disconnect 

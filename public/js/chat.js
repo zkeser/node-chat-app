@@ -43,7 +43,7 @@ socket.on('updateUserList', function(users){
    jQuery('#users').html(ol);
     console.log('Users list', users)
 })
-
+//create newMessage
 socket.on('newMessage', function(message) {
 var formattedTime = moment(message.createdAt).format('h:mm a')
 var template = $('#message-template').html();
@@ -70,17 +70,12 @@ socket.on('newLocationMessage', function(message){
  scrollToBottom();
  
 });
-// socket.on('newEmail', function(email) {
-//     console.log("New Email", email);
-// })
 
 var messageTextbox = $('[name=message');
 //submit messages
-
 $('#message-form').on('submit', function(e) {
     e.preventDefault();
     socket.emit('createMessage', {
-      from: 'User',
       text: messageTextbox.val()
     }, function () {
         messageTextbox.val('');
