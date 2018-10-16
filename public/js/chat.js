@@ -1,23 +1,22 @@
 var socket = io();
       
 socket.on('connect', function() {
-  console.log('Connected to server');
+ var params = jQuery.deparam(window.location.search);
 
-  //TEST Emits
-//   socket.emit('createEmail', {
-//       to:"example.example.com",
-//       text: "yo yo yo"
-//   })
-
-// socket.emit('createMessage', {
-//     from: 'Z',
-//     text: "Yup, that works for me"
-// })
+ socket.emit('join', params, function(err){
+    if (err){
+        alert(err)
+        window.location.href='/';
+    }else{
+        console.log('No error');
+    }
+ })
  });
 
 socket.on('disconnect', function() {
   console.log('Disconnected from server');
 });
+
 
 //AutoScroll
 function scrollToBottom(){
@@ -35,7 +34,15 @@ function scrollToBottom(){
         messages.scrollTop(scrollHeight);
     }
 }
-
+// update user list
+socket.on('updateUserList', function(users){
+   var ol = jQuery('<ol></ol>')
+   users.forEach(function(user) {
+       ol.append(jQuery('<li></li>').text(user))
+   })
+   jQuery('#users').html(ol);
+    console.log('Users list', users)
+})
 
 socket.on('newMessage', function(message) {
 var formattedTime = moment(message.createdAt).format('h:mm a')
@@ -69,6 +76,7 @@ socket.on('newLocationMessage', function(message){
 
 var messageTextbox = $('[name=message');
 //submit messages
+
 $('#message-form').on('submit', function(e) {
     e.preventDefault();
     socket.emit('createMessage', {
